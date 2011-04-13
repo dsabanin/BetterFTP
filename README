@@ -1,0 +1,12 @@
+Extension of the Ruby's default Net::FTP class.
+
+
+Some of the code is based on https://github.com/bmarzolf/ftputils gem, thanks to Bruz Marzolf.
+
+Changes from Net::FTP
+* Support for custom ports
+* mkdir_p command (recursive mkdir)
+* rm_r command (recursive rm)
+* cd command as an alias to chdir
+* reconnect! method
+* directory? and file? methods
