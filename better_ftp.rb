@@ -61,16 +61,16 @@ class BetterFTP < Net::FTP
       next if part == ""
       growing_path = File.join(growing_path, part)
       unless @created_paths_cache.include?(growing_path)
-        puts "Creating #{growing_path.inspect}" if @debug_mode
+        # puts "Creating #{growing_path.inspect}" if @debug_mode
         begin
           mkdir(growing_path)
           chdir(growing_path)
-          @created_paths_cache << growing_path
         rescue Net::FTPPermError => e
-          puts "Received #{e.class}: #{e.message}" if @debug_mode
+          # puts "Received #{e.class}: #{e.message}" if @debug_mode
         end
+        @created_paths_cache << growing_path        
       else
-        puts "Cache says we already created #{growing_path.inspect}" if @debug_mode
+        # puts "Cache says we already created #{growing_path.inspect}" if @debug_mode
       end
     end
   end
