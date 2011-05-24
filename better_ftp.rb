@@ -4,6 +4,7 @@ class BetterFTP < Net::FTP
 
   attr_accessor :port
   alias_method  :cd, :chdir
+  attr_reader :home
   
   def initialize(host = nil, user = nil, passwd = nil, acct = nil)
     super
@@ -11,6 +12,7 @@ class BetterFTP < Net::FTP
     @user = user
     @passwd = passwd
     @acct = acct
+    @home = self.pwd
     @created_paths_cache = []
   end
   
@@ -56,10 +58,18 @@ class BetterFTP < Net::FTP
   
   def mkdir_p(dir)
     parts = dir.split("/")
-    growing_path = "/"
+    if parts.first == "~"
+      growing_path = ""
+    else
+      growing_path = "/"
+    end
     for part in parts
       next if part == ""
-      growing_path = File.join(growing_path, part)
+      if growing_path == ""
+        growing_path = part
+      else
+        growing_path = File.join(growing_path, part)
+      end
       unless @created_paths_cache.include?(growing_path)
         # puts "Creating #{growing_path.inspect}" if @debug_mode
         begin
