@@ -3,6 +3,7 @@ require 'net/ftp'
 class BetterFTP < Net::FTP
 
   attr_accessor :port
+  attr_accessor :public_ip
   alias_method  :cd, :chdir
   attr_reader :home
   
@@ -102,5 +103,15 @@ class BetterFTP < Net::FTP
     chdir File.dirname(path)
     delete File.basename(path)
   end
-  
+
+private
+
+  def makeport
+    sock = TCPServer.open(@sock.addr[3], 0)
+    port = sock.addr[1]
+    host = @public_ip || sock.addr[3]
+    resp = sendport(host, port)
+    return sock
+  end
+
 end
