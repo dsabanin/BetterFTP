@@ -76,7 +76,7 @@ class BetterFTP < Net::FTP
         begin
           mkdir(growing_path)
           chdir(growing_path)
-        rescue Net::FTPPermError => e
+        rescue Net::FTPPermError, Net::FTPTempError => e
           # puts "Received #{e.class}: #{e.message}" if @debug_mode
         end
         @created_paths_cache << growing_path        
@@ -90,9 +90,13 @@ class BetterFTP < Net::FTP
     if directory?(path) 
       chdir path
 
-      files = nlst
-      files.each {|file| rm_r "#{path}/#{file}"}
-
+      begin
+        files = nlst
+        files.each {|file| rm_r "#{path}/#{file}"}
+      rescue Net::FTPTempError
+        # maybe all files were deleted already
+      end
+      
       rmdir path
     else
       rm(path)
