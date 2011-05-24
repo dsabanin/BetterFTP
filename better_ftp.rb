@@ -14,7 +14,12 @@ class BetterFTP < Net::FTP
     @passwd = passwd
     @acct = acct
     @home = self.pwd
+    initialize_caches
+  end
+
+  def initialize_caches
     @created_paths_cache = []
+    @deleted_paths_cache = []
   end
   
   def connect(host, port = nil)
@@ -23,7 +28,7 @@ class BetterFTP < Net::FTP
       print "connect: ", host, ", ", port, "\n"
     end
     synchronize do
-      @created_paths_cache = []      
+      initialize_caches
       @sock = open_socket(host, port)
       voidresp
     end
@@ -87,6 +92,8 @@ class BetterFTP < Net::FTP
   end
   
   def rm_r(path)
+    return if @deleted_paths_cache.include?(path)
+    @deleted_paths_cache << path
     if directory?(path) 
       chdir path
 
