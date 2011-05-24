@@ -11,6 +11,8 @@ Changes from Net::FTP
 * cd command as an alias to chdir
 * reconnect! method
 * directory? and file? methods
+* Support for custom host IP for PORT command
+* Expanding of paths with ~ in mkdir_p command (rm_r coming)
 
 
 Installation
