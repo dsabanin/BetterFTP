@@ -99,7 +99,10 @@ class BetterFTP < Net::FTP
 
       begin
         files = nlst
-        files.each {|file| rm_r "#{path}/#{file}"}
+        files.each { |file| 
+          next if file == "." or file == ".."
+          rm_r "#{path}/#{file}"
+        }
       rescue Net::FTPTempError
         # maybe all files were deleted already
       end
