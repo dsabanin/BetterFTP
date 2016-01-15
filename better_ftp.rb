@@ -81,7 +81,7 @@ class BetterFTP < Net::FTP
         begin
           mkdir(growing_path)
           chdir(growing_path)
-        rescue Net::FTPPermError, Net::FTPTempError => e
+        rescue Net::FTPPermError, Net::FTPTempError, Net::FTPReplyError => e
           # puts "Received #{e.class}: #{e.message}" if @debug_mode
         end
         @created_paths_cache << growing_path        
